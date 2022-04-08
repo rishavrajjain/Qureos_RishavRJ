@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
@@ -7,15 +5,14 @@ import 'package:http/http.dart';
 import '../page/email_logged_in_page.dart';
 
 class GoogleSignInApi {
-   
-   static final _googleSignIn = GoogleSignIn();
+  static final _googleSignIn = GoogleSignIn();
 
-   static Future<GoogleSignInAccount?> login() => _googleSignIn.signIn();
+  static Future<GoogleSignInAccount?> login() => _googleSignIn.signIn();
 }
 
-class LoginApi{
-
-     static Future<void> login(String email, password, BuildContext context,bool isLoginPage ) async {
+class LoginApi {
+  static Future<void> login(
+      String email, password, BuildContext context, bool isLoginPage) async {
     String abc;
     if (isLoginPage) {
       abc = 'login';
@@ -27,23 +24,22 @@ class LoginApi{
           body: {'email': email, 'password': password});
 
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        print(data['token']);
+        //var data = jsonDecode(response.body.toString());
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute<void>(
             builder: (BuildContext context) => SignUpPage(email: email),
           ),
         );
-        print('Login successfully');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content:
-              Text(isLoginPage ? 'Login In Failed' : 'Sign Up Failed'),
+          content: Text(isLoginPage ? 'Login In Failed' : 'Sign Up Failed'),
         ));
       }
     } catch (e) {
-      print(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString()),
+      ));
     }
   }
 }
